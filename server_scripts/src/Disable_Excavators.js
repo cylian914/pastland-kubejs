@@ -1,18 +1,12 @@
-// Disable Immersive Engineering Excavator
-
-// Remove excavator multiblock formation
-// This prevents players from building it at all
-ServerEvents.tags('immersiveengineering:multiblock/invalid', event => {
-    event.add('immersiveengineering:excavator');
-});
-
 // Remove all mineral veins (so even if the machine exists, it finds nothing)
-ServerEvents.highPriorityData((event) => {
-    event.addJson('immersiveengineering:worldgen/mineral/empty', {
-        "type": "immersiveengineering:mineral",
-        "ores": [],
-        "spoils": [],
-        "weight": 0,
-        "fail_chance": 1.0
-    });
+ServerEvents.recipes((event) => {
+    //removing vein result in a crash due to IE villager trying to find a vein
+    //TODO find a solution
+    /*event.recipeStream({type: "immersiveengineering:mineral_mix"}).forEach((recipe) => {
+	if (recipe.getId() == "immersiveengineering:mineral/igneous_rock")
+	    return; //let 1 non harmfull one to avoid villager crash
+	recipe.remove();
+    });*/
+    event.remove({type: "immersiveengineering:mineral_mix"});
+    event.remove({id: "immersiveengineering:crafting/survey_tools"});
 });
